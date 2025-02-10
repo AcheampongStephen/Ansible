@@ -120,4 +120,6 @@ Now your **control node** is ready to manage the **worker node** using Ansible! 
 - Go to the file `/etc/ssh/sshd_config.d/60-cloudimg-settings.conf`
 - Update `PasswordAuthentication yes`
 - Restart SSH -> `sudo systemctl restart ssh`
+- sudo passwd ubuntu
+- logout
 
