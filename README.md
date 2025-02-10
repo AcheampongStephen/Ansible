@@ -53,37 +53,67 @@ ssh-copy-id -f "-o IdentityFile <PATH TO PEM FILE>" ubuntu@<INSTANCE-PUBLIC-IP>
 - "-o IdentityFile <PATH TO PEM FILE>": This option specifies the identity file (private key) to use for the connection. The -o flag passes this option to the underlying ssh command.
 - ubuntu@<INSTANCE-IP>: This is the username (ubuntu) and the IP address of the remote server you want to access.
 
+# Ansible Control Node Setup on Ubuntu (EC2 Instance)
 
-##### if using an EC2 instance as the cintrol node, on the control node, configure SSH access to Ansible Host
-```
-cd .ssh
-```
-```
-ls
-```
+If you are using an **EC2 instance** as the control node, follow these steps to configure **SSH access** to the Ansible host.
 
-```
-ssh-keygen
-```
-press enter for the prompts
-```
-ls
-```
+## 1️⃣ Generate SSH Key Pair on the Control Node
+1. Navigate to the `.ssh` directory:
+   ```bash
+   cd ~/.ssh
+   ```
+2. List existing SSH keys:
+   ```bash
+   ls
+   ```
+3. Generate a new SSH key pair:
+   ```bash
+   ssh-keygen
+   ```
+   - Press **Enter** for all prompts to accept defaults.
 
-Copy:
+4. Verify the key has been created:
+   ```bash
+   ls
+   ```
+
+5. Copy the generated public key:
+   ```bash
+   cat id_rsa.pub
+   ```
+
+## 2️⃣ Configure SSH Access on the Worker Node
+1. SSH into the **worker node**:
+   ```bash
+   ssh ubuntu@<worker-node-ip>
+   ```
+2. Install Python (if not already installed):
+   ```bash
+   sudo apt update && sudo apt install -y python3
+   ```
+3. Navigate to the `.ssh` directory:
+   ```bash
+   cd ~/.ssh
+   ```
+4. Open the `authorized_keys` file for editing:
+   ```bash
+   nano authorized_keys
+   ```
+5. Paste the copied public key (`id_rsa.pub`) from the **control node** into this file.
+6. Save and exit (**CTRL + X**, then **Y**, then **Enter**).
+
+## 3️⃣ Test SSH Connection
+On your **control node**, test SSH access:
+```bash
+ssh ubuntu@<worker-node-ip>
 ```
-cat id_rsa.pub
-```
+You should be able to securely SSH into the worker node **without password authentication**.
+
+---
+
+Now your **control node** is ready to manage the **worker node** using Ansible! 🚀
 
 
-SSH into the worker node,
-intall python
-cd .ssh
-ls
-on authorized_keys, copy the key generated on the control node to it and save.
-
-on your control node,
-ssh ubuntu@ip and youd securely ssh into the worker node without any password authentication
 
 ### Using Password 
 
